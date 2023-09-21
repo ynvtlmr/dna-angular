@@ -1,0 +1,114 @@
+classDiagram
+class Beneficiary {
+    +beneficiary_name: str
+    +default_allocation: float
+}
+
+class FinancialInstrument {
+    +financial_instrument_name: str
+    +purchase_price: float
+    +year_acquired: int
+    +current_value: float
+    +rate: float
+    +term: int
+    +current_years_held(): int
+    +current_growth_dollars(): float
+    +current_growth_percentage(): flÍoat
+    +future_value_dollars(): float
+    +future_value_growth_percentage(): float
+}
+
+class Asset {
+    +is_taxable: bool
+    +is_to_be_sold: bool
+    +is_liquid: bool
+    +create_default_beneficiary_allocations()
+    +current_tax_liability_dollars(capital_gains_tax_rate: float): float
+    +future_tax_liability_dollars(capital_gains_tax_rate: float): float
+    +value_at_year(year_given: int): float
+    +value_series(start_year: int, end_year: int): List[float]
+    -total_allocation_to_beneficiaries: float
+}
+
+class AssetBeneficiaryAllocation {
+    -beneficiary: Beneficiary
+    -asset: Asset
+    +allocation: float
+}
+
+class Debt {
+    +annual_payment: float
+    +amount_paid_off_dollars(): float
+    +current_value_of_debt_dollars(): float
+    +debt_remaining_dollars(): float
+    +years_to_be_paid_off(): float
+    +future_value_of_actual_term_debt_dollars(): float
+    +insurable_future_value_dollars(): float
+    -nper(rate: float, term: int, amount_paid_off_dollars: float, fv: float = 0.0): float
+}
+
+class Goal {
+    +goal_name: str
+    +dollar_amount: float
+    +is_philanthropic: bool
+}
+
+class Business {
+    +name: str
+    +valuation: float
+    +rate: float
+    +term: int
+    +total_major_shareholder_value(): float
+    +total_major_shareholder_insurance(): float
+    +total_major_shareholder_disparity(): float
+}
+
+class Shareholder {
+    +shareholder_name: str
+    +share_percentage: float
+    +insurance_coverage: float
+    +share_value(): float
+    +liquidation_disparity(): float
+}
+
+class Agency {
+    +agency_name: str
+}
+
+class Advisor {
+    +advisor_name: str
+}
+
+class Client {
+    +client_name: str
+    +birthdate: Date
+    +province: str
+    +annual_income: float
+    +income_replacement_multiplier: int
+    +age(): int
+    +total_purchase_value_dollars(): float
+    +total_current_value_dollars(): float
+    +total_growth_dollars(): float
+    +total_future_value_dollars(): float
+}
+
+class Payments {
+    +id: UUID
+    +agency_id: UUID
+    +amount: float
+    +payment_date: Date
+    +status: str
+}
+
+Asset --|> FinancialInstrument
+AssetBeneficiaryAllocation --> Asset
+AssetBeneficiaryAllocation --> Beneficiary
+Debt --|> FinancialInstrument
+Agency --> Advisor
+Advisor --> Client
+Client --> Asset
+Client --> Debt
+Client --> Goal
+Client -- Shareholder
+Business --o Shareholder
+Agency --> Payments
